@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HS Code Classifier API - AI-Powered Customs Classification</title>
+    <meta name="description" content="AI-powered HS code classification API with 92% accuracy. Get HS codes, duty rates, VAT, and export tax rebates in seconds.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+        .nav {
+            background: white;
+            padding: 16px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo { font-size: 20px; font-weight: 700; color: #1a1a2e; }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a { color: #555; text-decoration: none; font-size: 14px; }
+        .nav-links a:hover { color: #1890ff; }
+        .hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .hero h1 { font-size: 42px; margin-bottom: 16px; }
+        .hero p { font-size: 18px; opacity: 0.9; max-width: 600px; margin: 0 auto 32px; }
+        .hero .cta {
+            display: inline-block;
+            background: #1890ff;
+            color: white;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 0 8px;
+        }
+        .hero .cta-outline {
+            background: transparent;
+            border: 2px solid white;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
+        .section-title {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 48px;
+            color: #1a1a2e;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        .feature {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: #e6f7ff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        .feature h3 { font-size: 18px; margin-bottom: 8px; }
+        .feature p { color: #666; font-size: 14px; }
+        .pricing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        .price-card {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            text-align: center;
+            border: 2px solid transparent;
+        }
+        .price-card.pro { border-color: #1890ff; position: relative; }
+        .price-card.pro::before {
+            content: "Popular";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1890ff;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .price-card h3 { font-size: 20px; margin-bottom: 8px; }
+        .price-card .price { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+        .price-card .price span { font-size: 14px; color: #999; font-weight: 400; }
+        .price-card .calls { color: #666; margin-bottom: 20px; font-size: 14px; }
+        .price-card ul { list-style: none; text-align: left; margin-bottom: 24px; }
+        .price-card li { padding: 6px 0; font-size: 14px; color: #555; }
+        .price-card li::before { content: "✓ "; color: #52c41a; font-weight: 600; }
+        .price-card .btn {
+            display: block;
+            background: #1890ff;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .price-card .btn-free { background: #52c41a; }
+        .api-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        .api-section h3 { font-size: 20px; margin-bottom: 16px; }
+        .code-block {
+            background: #1a1a2e;
+            color: #e8e8e8;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+        .code-block .comment { color: #6a9955; }
+        .code-block .key { color: #9cdcfe; }
+        .code-block .string { color: #ce9178; }
+        .endpoints { margin-top: 20px; }
+        .endpoint {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .endpoint:last-child { border-bottom: none; }
+        .method {
+            background: #52c41a;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 12px;
+            min-width: 50px;
+            text-align: center;
+        }
+        .method.post { background: #1890ff; }
+        .endpoint-path { font-family: 'Courier New', monospace; font-size: 14px; }
+        .endpoint-desc { color: #999; font-size: 13px; margin-left: auto; }
+        .footer {
+            background: #1a1a2e;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+        .footer-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+        }
+        .footer h4 { color: white; margin-bottom: 16px; font-size: 16px; }
+        .footer a { color: #999; text-decoration: none; display: block; padding: 4px 0; }
+        .footer a:hover { color: #1890ff; }
+        .footer-bottom {
+            max-width: 1000px;
+            margin: 32px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid #333;
+            text-align: center;
+            font-size: 13px;
+        }
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 16px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <div class="nav-logo">HS Code API</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#docs">API Docs</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>HS Code Classifier API</h1>
+        <p>AI-powered customs classification with 92% accuracy. Get HS codes, duty rates, VAT, and export tax rebates in seconds.</p>
+        <a href="#pricing" class="cta">Get Started - Free</a>
+        <a href="#docs" class="cta cta-outline">View API Docs</a>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title" id="features">Why Choose Our API?</h2>
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>92% Accuracy</h3>
+                <p>Trained on 536+ official customs classification decisions, with confidence scores and legal basis citations.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast Response</h3>
+                <p>Average response time under 20 seconds. Get instant classification results for your products.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📋</div>
+                <h3>Complete Data</h3>
+                <p>HS code, duty rate, VAT, export tax rebate, risk warnings, and legal references all in one response.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure & Reliable</h3>
+                <p>API key authentication, rate limiting, and usage tracking. Built on enterprise-grade infrastructure.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌍</div>
+                <h3>Global Coverage</h3>
+                <p>Supports classification for a wide range of commodities across all HS chapters.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💬</div>
+                <h3>Chat Support</h3>
+                <p>Ask follow-up questions about classification rules, regulations, and compliance requirements.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title" id="pricing">Pricing</h2>
+        <div class="pricing">
+            <div class="price-card">
+                <h3>Basic</h3>
+                <div class="price">$0<span>/month</span></div>
+                <div class="calls">100 API calls / month</div>
+                <ul>
+                    <li>AI HS code classification</li>
+                    <li>Duty rate & VAT</li>
+                    <li>Confidence scores</li>
+                    <li>Legal basis citations</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="#" class="btn btn-free">Get Started Free</a>
+            </div>
+            <div class="price-card pro">
+                <h3>Pro</h3>
+                <div class="price">$9.99<span>/month</span></div>
+                <div class="calls">1,000 API calls / month</div>
+                <ul>
+                    <li>Everything in Basic</li>
+                    <li>Risk warnings</li>
+                    <li>Chat API access</li>
+                    <li>Usage analytics</li>
+                    <li>Priority email support</li>
+                </ul>
+                <a href="#" class="btn">Subscribe to Pro</a>
+            </div>
+            <div class="price-card">
+                <h3>Ultra</h3>
+                <div class="price">$49.99<span>/month</span></div>
+                <div class="calls">10,000 API calls / month</div>
+                <ul>
+                    <li>Everything in Pro</li>
+                    <li>Custom classification rules</li>
+                    <li>24h priority support</li>
+                    <li>Higher rate limits</li>
+                    <li>Dedicated account manager</li>
+                </ul>
+                <a href="#" class="btn">Subscribe to Ultra</a>
+            </div>
+        </div>
+
+        <h2 class="section-title" id="docs">API Documentation</h2>
+        <div class="api-section">
+            <h3>Quick Start</h3>
+            <div class="code-block">
+<span class="comment"># Classify a product</span>
+curl -X POST https://dcd2321.pythonanywhere.com/api/v1/classify \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -H <span class="string">"X-API-Key: YOUR_API_KEY"</span> \
+  -d <span class="string">'{"product_name": "stainless steel thermos"}'</span>
+            </div>
+            <div class="code-block">
+<span class="comment"># Response example</span>
+{
+  <span class="key">"hs_code"</span>: <span class="string">"9617.0090"</span>,
+  <span class="key">"confidence"</span>: 0.78,
+  <span class="key">"duty_rate"</span>: <span class="string">"8%"</span>,
+  <span class="key">"vat_rate"</span>: <span class="string">"13%"</span>,
+  <span class="key">"export_tax_rebate"</span>: <span class="string">"13%"</span>,
+  <span class="key">"legal_basis"</span>: [<span class="string">"Z2024-0008"</span>]
+}
+            </div>
+            <div class="endpoints">
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="endpoint-path">/health</span>
+                    <span class="endpoint-desc">Health check</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/v1/classify</span>
+                    <span class="endpoint-desc">Classify product (requires API key)</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/v1/chat</span>
+                    <span class="endpoint-desc">Chat with AI (requires API key)</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="endpoint-path">/api/v1/usage</span>
+                    <span class="endpoint-desc">Check usage (requires API key)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <h4>Product</h4>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#docs">API Docs</a>
+            </div>
+            <div>
+                <h4>Legal</h4>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <div>
+                <h4>Support</h4>
+                <a href="mailto:hq15012670635@163.com">Contact Us</a>
+                <a href="#">FAQ</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 HS Code Classifier API. All rights reserved.</p>
+            <p style="margin-top:8px; font-size:12px;">Results are for reference only, not legal advice. Final classification is subject to customs official ruling.</p>
+        </div>
+    </footer>
+</body>
+</html>
